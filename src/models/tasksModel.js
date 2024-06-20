@@ -1,4 +1,4 @@
-const connection = require('./connection');
+const openDb = require('./connection');
 
 const getAll = async () => {
     const db = await openDb();
@@ -28,7 +28,7 @@ const updateTask = async (id,task) => {
 
 const deleteTask = async (id) => {
     const query = 'DELETE FROM tasks WHERE id = ?';
-    
+
     const db = await openDb();
     await db.run(query, [id]);
 };

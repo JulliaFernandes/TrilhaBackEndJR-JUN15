@@ -1,3 +1,5 @@
+const openDb = require("./models/connection"); // Use CommonJS syntax
+
 const app = require("./app");
 
 require('dotenv').config();
