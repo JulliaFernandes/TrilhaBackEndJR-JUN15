@@ -1,29 +1,30 @@
 const openDb = require('./connection');
 
-const getAll = async () => {
+const getAll = async (userId) => {
     const db = await openDb();
-    const tasks = await db.all('SELECT * FROM tasks');
+    const tasks = await db.all('SELECT * FROM tasks WHERE user_id = ?', [userId]);
+    console.log(tasks);
     return tasks;
 };
 
-const createTask = async (task) => {
+const createTask = async (userId, task) => {
     const { title, description } = task;
 
-    const query = 'INSERT INTO tasks (title, description) VALUES (?, ?)';
+    const query = 'INSERT INTO tasks (title, description, user_id) VALUES (?, ?, ?)';
     
     const db = await openDb();
-    const result = await db.run(query, [title, description]);
+    const result = await db.run(query, [title, description, userId]);
     
     return result.lastID;
 };
 
-const updateTask = async (id,task) => {
+const updateTask = async (taskId,task) => {
     const { title, description, status } = task;
 
     const query = 'UPDATE tasks SET title = ?, description = ?, status = ? WHERE id = ?';
 
     const db = await openDb();
-    await db.run(query, [title, description, status, id]);
+    await db.run(query, [title, description, status, taskId]);
 };
 
 const deleteTask = async (id) => {
@@ -37,7 +38,7 @@ module.exports = {
     getAll,
     createTask,
     updateTask,
-    deleteTask
+    deleteTask,
 };
 
 

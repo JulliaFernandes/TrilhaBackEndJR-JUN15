@@ -28,7 +28,7 @@ async function initDb() {
             status TEXT DEFAULT 'pending',
             user_id INTEGER,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (user_id) REFERENCES users(id)
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         );
     `);
 
