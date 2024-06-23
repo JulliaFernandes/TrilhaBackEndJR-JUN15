@@ -27,6 +27,11 @@ const login = async (email) =>{
     return user;
 }
 
+const getUserById = async (userId) => {
+    const db = await openDb();
+    return db.get('SELECT * FROM users WHERE id = ?', userId);
+}
+
 const updateIsLogged = async (userId, user) =>{
     const db = await openDb();
     const query = 'UPDATE users SET is_logged_in = ? WHERE id = ?';
@@ -56,6 +61,7 @@ module.exports = {
     getAllUsers,
     createUser,
     login,
+    getUserById,
     updateIsLogged,
     updateUser,
     deleteUser

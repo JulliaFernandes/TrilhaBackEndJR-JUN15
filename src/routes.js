@@ -40,7 +40,13 @@ router.get("/users", usersController.getAllUsers);
 router.post("/users", usersController.createUser);
 router.put("/users/:userId", usersController.updateUser);
 router.delete("/users/:userId", usersController.deleteUser);
-router.post("/users/login", usersMiddleware.validateFields ,usersController.login);
-
+router.post("/users/login",
+    usersMiddleware.validateFields,
+    usersController.login
+);
+router.post('/users/logout/:userId',
+    authMiddleware.authenticateToken,
+    usersController.logout
+);
 
 module.exports = router;

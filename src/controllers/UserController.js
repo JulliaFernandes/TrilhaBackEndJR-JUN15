@@ -30,52 +30,68 @@ const createUser = async (req, res) =>{
     }
 }
 
-// const login = async (req, res) =>{
-//     const {email, password, is_logged} = req.body;
+// const login = async (req, res) => {
+//     const { email, password, is_logged } = req.body;
 //     const user = await userModel.login(email);
 
-//     if(!user){
-//         return res.status(401).
-//         json({ error: 'Invalid email or password' });
+//     if (!user) {
+//         return res.status(401).json({ error: 'Invalid email or password' });
 //     }
 
-//     if(!await bcrypt.compare(password, user.password)){
-//         return res.status(401).
-//         json({ error: 'Invalid email or password' });
+//     if (!await bcrypt.compare(password, user.password)) {
+//         return res.status(401).json({ error: 'Invalid email or password' });
 //     }
 
 //     const userId = user.id;
+//     await userModel.updateIsLogged(userId, { is_logged_in: is_logged });
 
-//     await userModel.updateIsLogged(userId, {is_logged_in: is_logged});
+//     const token = generateToken({ id: userId });
 
 //     user.password = undefined;
+//     return res.status(200).json({ user, token });
+// };
 
-//     return res.status(200).json(user);
-// }
 
-const login = async (req, res) => {
-    const { email, password, is_logged } = req.body;
+const login = async (req, res) =>{
+    const {email, password} = req.body;
     const user = await userModel.login(email);
 
-    if (!user) {
+    if(!user){
         return res.status(401).json({ error: 'Invalid email or password' });
     }
 
-    if (!await bcrypt.compare(password, user.password)) {
+    if(!await bcrypt.compare(password, user.password)){
         return res.status(401).json({ error: 'Invalid email or password' });
     }
 
     const userId = user.id;
-    await userModel.updateIsLogged(userId, { is_logged_in: is_logged });
 
-    const token = generateToken({ id: userId });
+    await userModel.updateIsLogged(userId, {is_logged_in: 1});
 
     user.password = undefined;
+
+    const token = generateToken({ id: user.id });
+
     return res.status(200).json({ user, token });
-};
+}
 
+const logout = async (req, res) => {
+    const { userId } = req.params;
 
+    const user = await userModel.getUserById(userId);
 
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+
+    if(!user.is_logged_in){
+        return res.status(401).json({ error: 'User is not logged in' });
+    }
+    
+    await userModel.updateIsLogged(userId, { is_logged_in: 0 });
+
+    return res.status(200).json({ message: 'User logged out successfully' });
+}
 
 
 const updateUser = async (req, res) =>{
@@ -111,6 +127,7 @@ module.exports ={
     getAllUsers,
     createUser,
     login,
+    logout,
     updateUser,
     deleteUser
 }
