@@ -47,7 +47,7 @@ const validateUserIsLogged = async (req, res, next) => {
         const db = await openDb();
         const user = await db.get('SELECT is_logged_in FROM users WHERE id = ?', userId);
         
-        console.log(user);
+        // console.log(user);
 
         if (!user) {
             return res.status(404).json({ error: 'User not found' });

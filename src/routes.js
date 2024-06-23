@@ -8,21 +8,27 @@ const tasksMiddleware = require('./middlewares/tasksMiddleware');
 const usersController = require('./controllers/UserController');
 const usersMiddleware = require('./middlewares/userMiddleware');
 
+const authMiddleware = require('./middlewares/authMiddleware');
+
 router.get("/users/:userId/tasks",
+    authMiddleware.authenticateToken,
     tasksMiddleware.validateUserIsLogged,
     tasksController.getAll
 );
-router.post("/users/:userId/tasks", 
+router.post("/users/:userId/tasks",
+    authMiddleware.authenticateToken,
     tasksMiddleware.validateUserIsLogged,
     tasksMiddleware.validateFieldTitleDescription,
     tasksController.createTask
 );
 router.delete("/users/:userId/tasks/:taskId",
+    authMiddleware.authenticateToken,
     tasksMiddleware.validateUserIsLogged,
     tasksMiddleware.validateExistedTask,
     tasksController.deleteTask
 );
-router.put("/users/:userId/tasks/:taskId", 
+router.put("/users/:userId/tasks/:taskId",
+    authMiddleware.authenticateToken, 
     tasksMiddleware.validateUserIsLogged,
     tasksMiddleware.validateExistedTask,
     tasksMiddleware.validateFieldTitleDescription,

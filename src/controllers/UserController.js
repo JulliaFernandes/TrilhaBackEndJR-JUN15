@@ -1,8 +1,14 @@
 const userModel = require('../models/UserModel');
-const tasksModel = require('../models/TasksModel');
+// const tasksModel = require('../models/TasksModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-// const { get } = require('../routes');
+const authConfig = require('../config/auth');
+
+function generateToken(params = {}) {
+    return jwt.sign(params, authConfig.secret, {
+        expiresIn: 86400, // 1 dia em segundos
+    });
+}
 
 const getAllUsers = async (req, res) =>{
     const users = await userModel.getAllUsers();
@@ -24,28 +30,53 @@ const createUser = async (req, res) =>{
     }
 }
 
-const login = async (req, res) =>{
-    const {email, password, is_logged} = req.body;
+// const login = async (req, res) =>{
+//     const {email, password, is_logged} = req.body;
+//     const user = await userModel.login(email);
+
+//     if(!user){
+//         return res.status(401).
+//         json({ error: 'Invalid email or password' });
+//     }
+
+//     if(!await bcrypt.compare(password, user.password)){
+//         return res.status(401).
+//         json({ error: 'Invalid email or password' });
+//     }
+
+//     const userId = user.id;
+
+//     await userModel.updateIsLogged(userId, {is_logged_in: is_logged});
+
+//     user.password = undefined;
+
+//     return res.status(200).json(user);
+// }
+
+const login = async (req, res) => {
+    const { email, password, is_logged } = req.body;
     const user = await userModel.login(email);
 
-    if(!user){
-        return res.status(401).
-        json({ error: 'Invalid email or password' });
+    if (!user) {
+        return res.status(401).json({ error: 'Invalid email or password' });
     }
 
-    if(!await bcrypt.compare(password, user.password)){
-        return res.status(401).
-        json({ error: 'Invalid email or password' });
+    if (!await bcrypt.compare(password, user.password)) {
+        return res.status(401).json({ error: 'Invalid email or password' });
     }
 
     const userId = user.id;
+    await userModel.updateIsLogged(userId, { is_logged_in: is_logged });
 
-    await userModel.updateIsLogged(userId, {is_logged_in: is_logged});
+    const token = generateToken({ id: userId });
 
     user.password = undefined;
+    return res.status(200).json({ user, token });
+};
 
-    return res.status(200).json(user);
-}
+
+
+
 
 const updateUser = async (req, res) =>{
     const {userId} = req.params;

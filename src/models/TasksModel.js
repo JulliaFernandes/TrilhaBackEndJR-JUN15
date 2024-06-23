@@ -3,7 +3,7 @@ const openDb = require('./connection');
 const getAll = async (userId) => {
     const db = await openDb();
     const tasks = await db.all('SELECT * FROM tasks WHERE user_id = ?', [userId]);
-    console.log(tasks);
+    // console.log(tasks);
     return tasks;
 };
 
