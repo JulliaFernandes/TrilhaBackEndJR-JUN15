@@ -35,19 +35,25 @@ const createUser = async (req, res) => {
 
 const login = async (req, res) => {
     const { email, password } = req.body;
+
     try {
+        console.log('Login attempt for email:', email);
+        
         const user = await userModel.login(email);
 
         if (!user) {
+            console.log('User not found with email:', email);
             return res.status(401).json({ error: 'Invalid email or password' });
         }
 
         const passwordMatch = await bcrypt.compare(password, user.password);
         if (!passwordMatch) {
+            console.log('Password mismatch for email:', email);
             return res.status(401).json({ error: 'Invalid email or password' });
         }
 
         const userId = user.id;
+        console.log('User authenticated, userId:', userId);
 
         await userModel.updateIsLogged(userId, { is_logged_in: 1 });
 
@@ -55,9 +61,11 @@ const login = async (req, res) => {
 
         const token = generateToken({ id: user.id });
 
+        console.log('Login successful for userId:', userId);
         return res.status(200).json({ user, token });
     } catch (err) {
-        res.status(500).json({ error: 'Internal server error' });
+        console.error('Error during login:', err);
+        return res.status(500).json({ error: 'Internal server error' });
     }
 }
 
