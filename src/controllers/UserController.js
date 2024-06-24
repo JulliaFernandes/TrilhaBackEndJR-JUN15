@@ -4,9 +4,19 @@ const jwt = require('jsonwebtoken');
 const authConfig = require('../config/auth');
 
 function generateToken(params = {}) {
-    return jwt.sign(params, authConfig.secret, {
-        expiresIn: 86400, // 1 dia em segundos
-    });
+    console.log('Generating token for params:', params);
+
+    try {
+        const token = jwt.sign(params, authConfig.secret, {
+            expiresIn: '1d' // Alterei para '1d' para seguir a mesma lógica de tempo
+        });
+
+        console.log('Token generated successfully');
+        return token;
+    } catch (err) {
+        console.error('Error generating token:', err);
+        throw err;
+    }
 }
 
 const getAllUsers = async (req, res) => {
