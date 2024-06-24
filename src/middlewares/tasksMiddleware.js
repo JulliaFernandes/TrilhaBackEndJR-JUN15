@@ -8,29 +8,29 @@ async function openDb() {
     });
 }
 
-const validateFieldTitleDescription = (req,res,next) => {
-    const { body } = req;
+const validateFieldTitleDescription = (req, res, next) => {
+    const { title, description } = req.body;
 
-    if(body.title === undefined || body.description === undefined){
-        return res.status(400).json({message: 'The field "title" and "description" are mandatory'});
+    if (title === undefined || description === undefined) {
+        return res.status(400).json({ message: 'The fields "title" and "description" are mandatory' });
     }
-    
-    if(body.title === '' || body.description === ''){
-        return res.status(400).json({message: 'The field "title" and "description" can not be empty'});
+
+    if (title === '' || description === '') {
+        return res.status(400).json({ message: 'The fields "title" and "description" cannot be empty' });
     }
 
     next();
 }
 
-const validateFieldStatus = (req,res,next) => {
-    const { body } = req;
+const validateFieldStatus = (req, res, next) => {
+    const { status } = req.body;
 
-    if(body.status === undefined){
-        return res.status(400).json({message: 'The field "status" are mandatory'});
+    if (status === undefined) {
+        return res.status(400).json({ message: 'The field "status" is mandatory' });
     }
-    
-    if(body.status === ''){
-        return res.status(400).json({message: 'The field "status" can not be empty'});
+
+    if (status === '') {
+        return res.status(400).json({ message: 'The field "status" cannot be empty' });
     }
 
     next();
@@ -46,13 +46,12 @@ const validateUserIsLogged = async (req, res, next) => {
     try {
         const db = await openDb();
         const user = await db.get('SELECT is_logged_in FROM users WHERE id = ?', userId);
-        
-        // console.log(user);
 
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
-        else if (!user.is_logged_in) {
+
+        if (!user.is_logged_in) {
             return res.status(401).json({ error: 'User is not logged in' });
         }
 
@@ -63,14 +62,14 @@ const validateUserIsLogged = async (req, res, next) => {
     }
 };
 
-const validateExistedTask = async (req,res,next) => {
+const validateExistedTask = async (req, res, next) => {
     const { taskId } = req.params;
 
     if (!taskId) {
         return res.status(400).json({ error: 'Task ID is required' });
     }
 
-    try{
+    try {
         const db = await openDb();
         const task = await db.get('SELECT * FROM tasks WHERE id = ?', taskId);
 
@@ -79,8 +78,7 @@ const validateExistedTask = async (req,res,next) => {
         }
 
         next();
-    }
-    catch(err){
+    } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Internal server error' });
     }
