@@ -25,9 +25,10 @@ async function initDb() {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT NOT NULL,
             description TEXT,
-            status TEXT DEFAULT 'pending',
+            status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'in progress', 'finished')), -- Padrão 'pending' e restrição de status permitidos
             user_id INTEGER,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         );
     `);

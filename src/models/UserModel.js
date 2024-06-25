@@ -67,13 +67,15 @@ const updateUser = async (userId, user) => {
     try {
         const db = await openDb();
         const hashedPassword = await bcrypt.hash(password, 10);
-        const query = 'UPDATE users SET username = ?, email = ?, password = ? WHERE id = ?';
-        await db.run(query, [username, email, hashedPassword, userId]);
+        const query = 'UPDATE users SET username = ?, email = ?, password = ?, updated_at = ? WHERE id = ?';
+        const updatedAt = new Date().toISOString(); // Formata a data para o padrão ISO 8601
+        await db.run(query, [username, email, hashedPassword, updatedAt, userId]);
     } catch (error) {
         console.error('Error updating user:', error);
         throw new Error('Error updating user');
     }
 };
+
 
 const deleteUser = async (userId) => {
     try {

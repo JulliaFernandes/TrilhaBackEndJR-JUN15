@@ -27,17 +27,19 @@ const createTask = async (userId, task) => {
 
 const updateTask = async (taskId, task) => {
     const { title, description, status } = task;
-    const query = 'UPDATE tasks SET title = ?, description = ?, status = ? WHERE id = ?';
+    const query = 'UPDATE tasks SET title = ?, description = ?, status = ?, updated_at = ? WHERE id = ?';
 
     try {
         const db = await openDb();
-        await db.run(query, [title, description, status, taskId]);
+        const updatedAt = new Date().toISOString(); // Formata a data para o padrão ISO 8601
+        await db.run(query, [title, description, status, updatedAt, taskId]);
         return task;
     } catch (error) {
         console.error('Error updating task:', error);
         throw new Error('Error updating task');
     }
 };
+
 
 const deleteTask = async (id) => {
     const query = 'DELETE FROM tasks WHERE id = ?';

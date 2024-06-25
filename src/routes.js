@@ -10,6 +10,8 @@ const usersMiddleware = require('./middlewares/userMiddleware');
 
 const authMiddleware = require('./middlewares/authMiddleware');
 
+
+// Tasks routes
 router.get("/users/:userId/tasks",
     authMiddleware.authenticateToken,
     tasksMiddleware.validateUserIsLogged,
@@ -36,6 +38,7 @@ router.put("/users/:userId/tasks/:taskId",
     tasksController.updateTask
 );
 
+// Users routes
 router.get("/users", usersController.getAllUsers);
 router.post("/users", 
     usersMiddleware.validateFields,
@@ -43,11 +46,13 @@ router.post("/users",
     usersMiddleware.validateExistedUser,
     usersController.createUser);
 router.put("/users/:userId",
+    authMiddleware.authenticateToken,
     usersMiddleware.validateUserIsLogged,
     usersMiddleware.validateExistedEmail,
     usersMiddleware.validateExistedUser,
     usersController.updateUser);
 router.delete("/users/:userId",
+    authMiddleware.authenticateToken,
     usersMiddleware.validateUserIsLogged,
     usersController.deleteUser);
 router.post("/users/login",
