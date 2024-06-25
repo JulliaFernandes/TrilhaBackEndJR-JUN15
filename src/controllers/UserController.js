@@ -4,14 +4,11 @@ const jwt = require('jsonwebtoken');
 const authConfig = require('../config/auth');
 
 function generateToken(params = {}) {
-    console.log('Generating token for params:', params);
-
     try {
         const token = jwt.sign(params, authConfig.secret, {
-            expiresIn: '1d' // Alterei para '1d' para seguir a mesma lógica de tempo
+            expiresIn: '1d' // 1 dia em segundos
         });
 
-        console.log('Token generated successfully');
         return token;
     } catch (err) {
         console.error('Error generating token:', err);
@@ -47,31 +44,24 @@ const login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        console.log('Login attempt for email:', email);
-        
         const user = await userModel.login(email);
 
         if (!user) {
-            console.log('User not found with email:', email);
             return res.status(401).json({ error: 'Invalid email or password' });
         }
 
         const passwordMatch = await bcrypt.compare(password, user.password);
         if (!passwordMatch) {
-            console.log('Password mismatch for email:', email);
             return res.status(401).json({ error: 'Invalid email or password' });
         }
 
         const userId = user.id;
-        console.log('User authenticated, userId:', userId);
-
         await userModel.updateIsLogged(userId, { is_logged_in: 1 });
 
         user.password = undefined;
 
         const token = generateToken({ id: user.id });
 
-        console.log('Login successful for userId:', userId);
         return res.status(200).json({ user, token });
     } catch (err) {
         console.error('Error during login:', err);
