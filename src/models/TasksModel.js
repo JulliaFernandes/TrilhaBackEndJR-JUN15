@@ -1,4 +1,4 @@
-const openDb = require('./connection');
+const openDb = require('../database/connection');
 
 const getAll = async (userId) => {
     try {

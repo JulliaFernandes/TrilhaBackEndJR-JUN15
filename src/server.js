@@ -1,4 +1,4 @@
-const openDb = require("./models/connection"); // Use CommonJS syntax
+const openDb = require("./database/connection"); // Use CommonJS syntax
 
 const app = require("./app");
 
