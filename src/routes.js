@@ -65,7 +65,7 @@ router.post('/users/logout/:userId',
     usersController.logout
 );
 
-router.get("/api-docs", (req, res) => {
+router.get("/", (req, res) => {
     res.send("Welcome to the server home page!");
 });
 
