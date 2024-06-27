@@ -24,7 +24,7 @@
             },
             "post": {
                 "summary": "Create a new user",
-                "tags": ["Users"],
+                "tags": ["Authentication"],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -139,7 +139,7 @@
         "/users/login": {
             "post": {
                 "summary": "Login user",
-                "tags": ["Users"],
+                "tags": ["Authentication"],
                 "requestBody": {
                     "content": {
                         "application/json": {
