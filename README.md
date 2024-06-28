@@ -25,7 +25,7 @@ Este projeto tem como objetivo desenvolver uma API RESTful para gerenciamento de
 ## Documentação
 Toda a documentação pode ser acessada no link abaixo, que encaminhará para o Swagger:
 ```
-https://gerenciadordetarefas.up.railway.app/api-docs/#/
+https://gerenciadordetarefas.up.railway.app/api-docs/
 ```
 ## Deploy
 Foi utilizada a ferramenta Railway para a realização do deploy.
