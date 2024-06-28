@@ -65,8 +65,6 @@ router.post('/users/logout/:userId',
     usersController.logout
 );
 
-router.get("/", (req, res) => {
-    res.send("Welcome to the server home page!");
-});
+
 
 module.exports = router;

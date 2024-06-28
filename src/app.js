@@ -11,6 +11,10 @@ app.use(express.json());
 
 app.use(router);
 
+app.get('/', (req, res) => {
+    res.redirect('/api-docs');
+});
+
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 // setupSwagger(app); // Passe a instância do app para a função setupSwagger
 
