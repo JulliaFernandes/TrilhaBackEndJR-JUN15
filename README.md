@@ -20,86 +20,111 @@ Este projeto tem como objetivo desenvolver uma API RESTful para gerenciamento de
 - Login de Usuário: Endpoint para autenticar um usuário e gerar um token JWT.
 - Proteção de Rotas: Garantir que apenas usuários autenticados possam acessar os endpoints de tarefas.
 
-## Banco de Dados:
-- Utilizar SQLite como banco de dados para armazenar informações de usuários e tarefas.
+## Documentação:
+Toda a documentação pode ser acessada no link abaixo, que encaminhara para o Swagger:
+```
+https://gerenciadordetarefas.up.railway.app/api-docs/#/
+```
+## Deploy:
+Foi utilizado a ferramenta Railway para a realização do deploy
 
-   #### Estrutura do Projeto:
-   ```plaintext
-   project-root/
-   │
-   ├── src/
-   │   ├── controllers/
-   │   ├── models/
-   │   ├── routes/
-   │   ├── middlewares/
-   │   ├── database/
-   │   └── app.js
-   │
-   ├── .env
-   ├── .gitignore
-   ├── README.md
-   └── package.json
-   ```
-## Entregáveis:
-   1. **Código Fonte:**
-      - Código fonte do projeto, organizado conforme a estrutura acima.
-   2. **Repositório GitHub:**
-      - Repositório público contendo o código fonte e documentação.
-   3. **Documentação:**
-      - README.md com instruções sobre como configurar e executar o projeto, além de detalhes dos endpoints da API.
+## Funcionamento:
+Temos CRUD para usuário e CRUD para as tarefas.
 
-### Detalhes Técnicos: 🔧
-- **Boas Práticas:** Utilizar boas práticas de código limpo, legível e bem documentado.
-- **Git:** Utilizar Git para controle de versão e submeter o projeto através de um repositório público no GitHub.
+Todas as opções de CRUD de tarefas devem ser acessas somente apos o login do usuário.
 
-### Dicas para Abordar o Projeto 🌟
-- **Crie um Fork desse Repositório.**
-- **Criar do Zero:** É fundamental que o projeto seja desenvolvido completamente do zero, demonstrando suas habilidades e criatividade desde o início.
-- **Utilize bibliotecas** como Express para criação da API e jsonwebtoken para autenticação.
-- **Documente cada etapa do processo para facilitar a compreensão.**
+Foi dividio as rotas na parte de Usuário, Tarefas e Autenticação.
 
-### Critérios de Avaliação: 📝
-- **Funcionalidade:** A aplicação atende aos requisitos funcionais e funciona corretamente?
-- **Qualidade do Código:** O código é limpo, bem estruturado e adequadamente documentado?
-- **Segurança:** A autenticação foi implementada corretamente e as rotas estão protegidas?
-- **Uso do Git:** O controle de versão é usado de forma eficaz com mensagens de commit significativas?
-- **Documentação:** A documentação é clara e detalha o processo de desenvolvimento e uso da API?
+## Autenticação:
+Essa seção é para a realização de autenticação do usuário, como criar a conta, acessar a conta e se deslogar do sistema.
 
-### Não Queremos 🚫
-- Descobrir que o candidato não foi quem realizou o teste.
-- Ver commits grandes sem muita explicação nas mensagens no repositório.
-- Entregas padrão ou cópias de outros projetos. Buscamos originalidade e autenticidade em cada contribuição.
+### Criar usuário:
+Para a criação de um usuário voce pode acessar a rota: `https://gerenciadordetarefas.up.railway.app/api-docs/#/Authentication/post_users` e colocar os paramentros necessários para a criação do mesmo:
+```
+{
+  "username": "string",
+  "email": "string",
+  "password": "string"
+}
+```
+### Login:
+Para login voce deve existir ja no banco de dados, se não existir crie uma conta antes, e acessar a rota: `https://gerenciadordetarefas.up.railway.app/api-docs/#/Authentication/post_users_login`, passando no body da requisição:
+```
+{
+  "email": "string",
+  "password": "string"
+}
+```
+Ela ira retornar os dados do usuário e o token de autenticação. É necessário coloca-lo na opção `Authorize`, que aparece no canto superior direito da página:
 
-### Prazo ⏳
-Os candidatos devem completar a trilha em no máximo em 2 semanas, começando a contar a partir de 15/06.
+![image](https://github.com/JulliaFernandes/TrilhaBackEndJR-JUN15/assets/118275249/d2869a55-7fc8-4a97-83e8-9906c68652e2)
 
-A conclusão da trilha inicial é um requisito obrigatório para avançar para a trilha 
-final. Caso a trilha inicial não seja concluída dentro do prazo estabelecido, o 
-candidato estará impossibilitado de prosseguir para trilha final.
+Ao clicar na opção, no campo `Values` que aparece cole o token que foi retornado e clique em Authorize, sem esse token não é possivel realizar o CRUD de tarefas e nem a alteração de dados do usuário.
+![image](https://github.com/JulliaFernandes/TrilhaBackEndJR-JUN15/assets/118275249/4f7915f6-d20f-4efe-bd4b-0b4d5d90aeee)
 
-**Data máxima para entrega: 29/06**
 
-### Instruções de Entrega: 📬
-Após finalizar o projeto, publique-o em uma URL pública (por exemplo, Vercel, Netlify, GitHub Pages, etc.) e hospede o seu servidor na nuvem. Use serviços que ofereçam uso gratiuto por um período, como a AWS e preencha o [Formulário](https://forms.gle/gZViPMTSDV5nidSu6):  
+### Logout:
+Essa opção foi criada no intuito de usuário se deslogar da sua conta e não ser possível de ser realizadas alterações em seus dados e tarefas se caso ele não estiver logado, acesse a rota: `https://gerenciadordetarefas.up.railway.app/api-docs/#/Authentication/post_users_logout__userId_` e passe o ID do usuário que deseja deslogar a conta.
 
----
+## Usuários:
+Nessa seção é feita para que seja possível que o usuário consiga realizar alteração em seus dados como deletar sua conta, alterar alguns dados e ver todos os usuário cadastrados no banco de dados:
 
-### Desafio da Inovação 🚀
-Achou esse projeto inicial simples? Eleve ainda mais! Estamos em busca de mentes inovadoras que não apenas criem, mas que também desafiem os padrões. Como você pode transformar essa estrutura inicial em algo verdadeiramente extraordinário? Demonstre o poder da sua criatividade e o impacto das suas ideias inovadoras!
+### Visualização de todos os usuários cadastrados:
+Acesse a rota: `https://gerenciadordetarefas.up.railway.app/api-docs/#/Users/get_users` e execute que ira listar todos os usuário se existirem.
 
----
+### Atualizar um usuário:
+Com acesso a essa rota voce pode alterar informações do usuário como email, nome de usuário e a senha.
 
-🔗 **Mantenha-se Conectado:**
-- [Discord](https://discord.gg/wzA9FGZHNv)
-- [Website](http://www.codigocertocoders.com.br/)
-- [LinkedIn](https://www.linkedin.com/company/codigocerto/)
-  
+Acesse a rota e passe o Id do usuário que deseja alterar e as mudanças a serem feitas no corpo da requisição. Rota: `https://gerenciadordetarefas.up.railway.app/api-docs/#/Users/put_users__userId_`
+```
+{
+  "username": "string",
+  "email": "string",
+  "password": "string"
+}
+```
+### Deletar usuário:
+Para a exclusão de sua conta passe o Id do usuário que deseja deletar, lembrando que o mesmo deve estar logado no sistema, a rota para essa função é: `https://gerenciadordetarefas.up.railway.app/api-docs/#/Users/delete_users__userId_`
+
+## Tarefas:
+A funções CRUD de tarefas, todas necessitam de que o usuário esteja logado e do token de ativação.
+
+### Listar todas as tarefas:
+Para conseguir vizualizar todas as suas tarefas, basta ir na rota: `https://gerenciadordetarefas.up.railway.app/api-docs/#/Tasks/get_users__userId__tasks` e informar o número do Id do usuário que deseja saber as tarefas.
+
+### Criar tarefa:
+Para essa função, voce pode acessar a rota: `https://gerenciadordetarefas.up.railway.app/api-docs/#/Tasks/post_users__userId__tasks` e cadastrar uma nova tarefa. É necessário informar o Id do usuário que deseja cadastrar essa tarefas e passar no corpo da requisição os seguintes parametros:
+```
+{
+  "title": "string",
+  "description": "string"
+}
+```
+Ela ira retorna o numero do id da tarefa que voce acabou de criar.
+
+
+### Atualizar tarefa:
+Para isso vá à rota: `https://gerenciadordetarefas.up.railway.app/api-docs/#/Tasks/put_users__userId__tasks__taskId_` e informe o numéro do ID do usuário e o ID da tarefa, logo apos isso passe no corpo da requisão as mudanças a serem feitas nos seguintes campos:
+```
+{
+  "title": "string",
+  "description": "string",
+  "status": "string"
+}
+```
+
+### Deletar tarefa:
+Para a exclusão de alguma tarefa, basta passar o Id do usuário e o Id da tarefa que deseja apagar.
+
+### Tecnologias:
+Foram usadas as seguintes ferrametas para a execução do programa:
+- NodeJS
+- Express
+- SQLite
+- ByCrypt
+- DotEnv
+- JWT
+- Swagger-ui
+
 🌐 **Contato:**
-- Email: codigocertocoders@gmail.com
-
----
-
-### Precisa de Ajuda?
-Está com alguma dificuldade, encontrou algum problema no desafio ou tem alguma sugestão pra gente? Crie uma issue e descreva o que achar necessário.
-
-**Construindo o amanhã, hoje.**
+- Email: julliafernandesf41@gmail.com
